@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Город {{ object.name }}{% endblock %}
+
+{% block content %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Удалить {{ object.name }}?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <form action="{% url 'cities:delete_city' object.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <input type="submit" class="btn btn-danger" value="Удалить">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="card shadow">
+                <div class="card-body">
+                    <p class="card-text text-center">Город: {{ object.name }}</p>
+                    <div class="d-flex justify-content-center">
+                        <a class="btn btn-secondary" href="{% url 'cities:update_city' object.pk %}">Обновить</a>
+                        <a href="{% url 'cities:list_cities' %}">
+                            <button type="button" class="btn btn-outline-info">Наза к списку</button>
+                        </a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Удалить город
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
