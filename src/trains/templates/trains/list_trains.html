@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Список населенных пунктов{% endblock %}
+{% block title %}Список поездов{% endblock %}
 
 {% block content %}
 
@@ -8,27 +8,37 @@
         <div class="col-md-7 mx-auto">
             <div class="card shadow">
                 <div class="card-body">
-
                     <table class="table table-striped">
-                        <thead class="table-primary">
+                        <thead>
                         <tr>
-                            <th colspan="3">
-                                <h5 class="font-italic text-center">Список населенных пунктов</h5>
+                            <th colspan="6">
+                                <h5 class="font-italic text-center">Список поездов</h5>
                             </th>
                         </tr>
+                        <tr class="table-primary">
+                            <th>Номер</th>
+                            <th>Откуда</th>
+                            <th>Куда</th>
+                            <th class="text-center">Время в пути</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
                         </thead>
-                        {% for city in page_obj %}
+                        {% for train in page_obj %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'cities:detail_city' city.pk %}">{{ city.name }}</a>
+                                    <a href="{% url 'trains:detail_train' train.pk %}">{{ train.name }}</a>
                                 </td>
+                                <td>{{ train.from_city }}</td>
+                                <td>{{ train.to_city }}</td>
+                                <td class="text-center">{{ train.travel_time }}</td>
                                 <td>
-                                    <a class="btn btn-outline-info btn-sm" href="{% url 'cities:update_city' city.pk %}">
+                                    <a class="btn btn-outline-info btn-sm" href="{% url 'trains:update_train' train.pk %}">
                                         Редактировать
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="btn btn-outline-danger btn-sm" href="{% url 'cities:delete_city' city.pk %}">
+                                    <a class="btn btn-outline-danger btn-sm" href="{% url 'trains:delete_train' train.pk %}">
                                         Удалить
                                     </a>
                                 </td>
@@ -65,17 +75,6 @@
                 </nav>
 
             </div>
-
-            <div class="card shadow mt-4">
-                <div class="card-body d-flex justify-content-center">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input class="btn btn-outline-info btn-sm" type="submit" value="Отправить">
-                    </form>
-                </div>
-            </div>
-
         </div>
     </div>
 {% endblock %}

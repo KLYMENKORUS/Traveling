@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Поезд №{{ object.name }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th colspan="6">
+                                <h5 class="font-italic text-center">Поезд №{{ object.name }}</h5>
+                            </th>
+                        </tr>
+                        <tr class="table-primary">
+                            <th>Номер</th>
+                            <th>Откуда</th>
+                            <th>Куда</th>
+                            <th class="text-center">Время в пути</th>
+                        </tr>
+                        </thead>
+                            <tr>
+                                <td>{{ object.name }}</td>
+                                <td>{{ object.from_city }}</td>
+                                <td>{{ object.to_city }}</td>
+                                <td class="text-center">{{ object.travel_time }}</td>
+                            </tr>
+                    </table>
+
+
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'trains:list_trains' %}">
+                            <button type="button" class="btn btn-outline-info">Наза к списку</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

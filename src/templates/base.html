@@ -1,5 +1,6 @@
 {% load static %}
 {% url 'cities:list_cities' as cities %}
+{% url 'trains:list_trains' as trains %}
 
 
 <!doctype html>
@@ -27,12 +28,17 @@
                   <li class="nav-item {% if request.path == cities %}active{% endif %}">
                       <a class="nav-link" href="{% url 'cities:list_cities' %}">Города</a>
                   </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{% url 'cities:create_city' %}">Добавить город</a>
+                  <li class="nav-item {% if request.path == trains %}active{% endif %}">
+                      <a class="nav-link" href="{% url 'trains:list_trains' %}">Поезда</a>
                   </li>
-                  {% if user.is_authenticated %}
-                  <li class="nav-item">
-                      <a class="nav-link" href="#"></a>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink"
+                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Добавить</a>
+                      <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                          <li><a class="dropdown-item" href="{% url 'cities:create_city' %}">Добавить город</a></li>
+                          <li><a class="dropdown-item" href="{% url 'trains:create_train' %}">Добавить поезд</a></li>
+                      </ul>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="#"></a>
@@ -43,34 +49,34 @@
                       <li class="nav-item">
                           <a class="nav-link" href="#"></a>
                       </li>
-                  {% else %}
+
                   <li class="nav-item">
                       <a class="nav-link" href="#"></a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="#"></a>
                   </li>
-                  {% endif %}
+
 
               </ul>
           </div>
       </nav>
   </div>
 
-  <div class="container my-3">
+  <div class="container">
       <div class="row">
-        <div class="col-md-6 mx-auto">
-          {% if messages %}
-              <ul class="alert alert-dismissible messages fade show">
-                  {% for message in messages %}
-                      <li class="{{ message.tags }}">
-                          {{ message|safe }}
-                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                      </li>
-                  {% endfor %}
-              </ul>
-          {% endif %}
-        </div>
+          <div class="col-md-8 mx-auto">
+              {% if messages %}
+                  <ul class="alert alert-dismissible messages fade show">
+                      {% for message in messages %}
+                          <li class="{{ message.tags }}">
+                              {{ message|safe }}
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </li>
+                      {% endfor %}
+                  </ul>
+              {% endif %}
+          </div>
       </div>
       <div class="container bg-light py-5">
           {% block content %}
