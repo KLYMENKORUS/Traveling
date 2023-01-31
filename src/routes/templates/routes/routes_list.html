@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Поиск маршрута{% endblock %}
+
+{% block content %}
+    <h4 class="text-center font-italic">Поиск маршрута</h4>
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="card shadow mt-4">
+                <div class="card-body ">
+                    <form action="{% url 'find_routes' %}" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input class="btn btn-info" type="submit" value="Найти">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
