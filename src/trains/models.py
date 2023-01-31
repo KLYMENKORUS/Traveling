@@ -17,7 +17,7 @@ class Train(models.Model):
 
     def clean(self):
         if self.from_city == self.to_city:
-            raise ValidationError('Измените город приьытия/отправления!')
+            raise ValidationError('Измените город прибытия/отправления!')
         qs = Train.objects.filter(from_city=self.from_city,
                                   to_city=self.to_city,
                                   travel_time=self.travel_time).exclude(pk=self.pk)
