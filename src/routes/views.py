@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from .forms import RouteForm
 from django.contrib import messages
 from .utils import get_routes
@@ -12,8 +12,7 @@ __all__ = (
 
 def routes_list(request):
     form = RouteForm()
-    context = {'form': form}
-    return render(request, 'routes/routes_list.html', context)
+    return render(request, 'routes/routes_list.html', {'form': form})
 
 
 def find_routes(request):
@@ -24,9 +23,9 @@ def find_routes(request):
                 context = get_routes(request, form)
             except ValueError as v_e:
                 messages.error(request, v_e)
-                return redirect('home')
+                return render(request, 'routes/routes_list.html', {'form': form})
             return render(request, 'routes/routes_list.html', context)
-        return redirect('home')
+        return render(request, 'routes/routes_list.html', {'form': form})
 
     else:
         form = RouteForm()

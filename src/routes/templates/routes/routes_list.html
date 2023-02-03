@@ -3,10 +3,44 @@
 {% block title %}Поиск маршрута{% endblock %}
 
 {% block content %}
-    <h4 class="text-center font-italic">Поиск маршрута</h4>
-    <div class="row">
+        {% if routes %}
+            <div class="row">
+                <div class="col-md-7 mx-auto">
+                    <div class="card shadow mt-3">
+                        <div class="card-body">
+                            <h3 class="text-center font-italic">
+                                Маршрут{% if routes|length %}ы{% endif %} из г.{{ from_city }} в г.{{ to_city }}
+                                </h3>
+                            {% for route in routes %}
+                                <table class="table table-striped">
+                                    <thead class="table-primary">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col" class="text-center">Время в пути</th>
+                                        <th scope="col">Список поездов по этому маршруту</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for train in route.trains %}
+                                        <tr>
+                                            <th scope="row">{{ forloop.counter }}</th>
+                                            <td class="text-center">{{ route.total_time }}</td>
+                                            <td>{{ train }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    <div class="row mt-5">
+        <h4 class="text-center font-italic">Поиск маршрута</h4>
         <div class="col-md-5 mx-auto">
-            <div class="card shadow mt-4">
+            <div class="card shadow mt-3">
                 <div class="card-body ">
                     <form action="{% url 'find_routes' %}" method="post">
                         {% csrf_token %}
@@ -17,4 +51,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}

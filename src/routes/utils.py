@@ -32,7 +32,7 @@ def get_routes(request, form) -> dict:
     """Функция отбора маршрутов"""
 
     context = {'form': form}
-    qs = Train.objects.all()
+    qs = Train.objects.all().select_related('from_city', 'to_city')
     graph = get_graph(qs)
     data = form.cleaned_data
     from_city = data['from_city']
@@ -55,7 +55,7 @@ def get_routes(request, form) -> dict:
     else:
         right_ways = all_ways
 
-    trains = []
+    routes = []
     all_trains = {}
 
     for q in qs:
@@ -71,12 +71,24 @@ def get_routes(request, form) -> dict:
             qs = all_trains[(route[i], route[i + 1])]
             q = qs[0]
             total_time += q.travel_time
-            temp['trains'].append(qs)
+            temp['trains'].append(q)
         temp['total_time'] = total_time
 
         if total_time <= traveling_time:
-            trains.append(temp)
+            routes.append(temp)
 
-    if not trains:
+    if not routes:
         raise ValueError('Время в пути больше заданного!')
+    sorted_routes = []
+    if len(routes) == 1:
+        sorted_routes = routes
+    else:
+        times = sorted(list(set(r['total_time'] for r in routes)))
+        for time in times:
+            for route in routes:
+                if time == route['total_time']:
+                    sorted_routes.append(route)
+
+    context['routes'] = sorted_routes
+    context.update({'from_city': from_city.name, 'to_city': to_city.name})
     return context
