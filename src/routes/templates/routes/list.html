@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Список поездов{% endblock %}
+{% block title %}Список Маршрутов{% endblock %}
 
 {% block content %}
 
@@ -12,36 +12,25 @@
                         <thead>
                         <tr>
                             <th colspan="6">
-                                <h5 class="font-italic text-center">Список поездов</h5>
+                                <h5 class="font-italic text-center">Список Маршрутов</h5>
                             </th>
                         </tr>
                         <tr class="table-primary">
-                            <th>Номер</th>
+                            <th>Название маршрута</th>
                             <th>Откуда</th>
                             <th>Куда</th>
                             <th class="text-center">Время в пути</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
+
                         </tr>
                         </thead>
-                        {% for train in object_list %}
+                        {% for route in object_list %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'trains:detail_train' train.pk %}">{{ train.name }}</a>
+                                    <a href="{% url 'detail_route' route.pk %}">{{ route.name }}</a>
                                 </td>
-                                <td>{{ train.from_city }}</td>
-                                <td>{{ train.to_city }}</td>
-                                <td class="text-center">{{ train.travel_time }}</td>
-                                <td>
-                                    <a class="btn btn-outline-info btn-sm" href="{% url 'trains:update_train' train.pk %}">
-                                        Редактировать
-                                    </a>
-                                </td>
-                                <td>
-                                    <a class="btn btn-outline-danger btn-sm" href="{% url 'trains:delete_train' train.pk %}">
-                                        Удалить
-                                    </a>
-                                </td>
+                                <td>{{ route.from_city }}</td>
+                                <td>{{ route.to_city }}</td>
+                                <td class="text-center">{{ route.travel_time }}</td>
                             </tr>
 
                         {% endfor %}
@@ -77,9 +66,9 @@
             </div>
 
             <div class="card shadow mt-4">
-                <h5 class="card-text text-center font-italic mt-3">Быстрый поиск по поездам</h5>
+                <h5 class="card-text text-center font-italic mt-3">Быстрый поиск по Маршрутам</h5>
                 <div class="card-body d-flex justify-content-center">
-                    <form action="{% url 'trains:search_train' %}">
+                    <form action="{% url 'search_route' %}">
                     <input class="form-control" type="text" placeholder="Поиск"
                            aria-label="Search" name="q">
                     <button class="btn btn-secondary my-2" type="submit">Поиск</button>

@@ -3,6 +3,33 @@
 {% block title %}Обновление записи о городе{% endblock %}
 
 {% block content %}
-    <h5 class="card-text text-center mt-3">Обновление записи о городе</h5>
-    {% include 'form.html' with button='Обновить' %}
+     <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card shadow mt-4">
+                <div class="card-body">
+                <h5 class="card-text text-center font-italic">Обновление записи о городе</h5>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="fieldWrapper">
+                            {% if field.errors %}
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    {% for error in field.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endif %}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <input class="btn btn-info mt-3" type="submit" value="Обновить">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

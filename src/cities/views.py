@@ -5,14 +5,29 @@ from django.views.generic import DetailView, CreateView, UpdateView, ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import CityForm
 from .models import City
+from django.db.models import Q
+
 
 __all__ = (
     'CityListView',
     'DetailCityView',
     'CreateCityView',
     'UpdateCityView',
+    'SearchCities',
     'delete_city'
 )
+
+
+class SearchCities(ListView):
+    model = City
+    template_name = 'cities/list_cities.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        search = City.objects.filter(
+            Q(name__icontains=query)
+        )
+        return search
 
 
 class CityListView(ListView):

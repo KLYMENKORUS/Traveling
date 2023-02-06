@@ -17,7 +17,7 @@
                             </th>
                         </tr>
                         </thead>
-                        {% for city in page_obj %}
+                        {% for city in object_list %}
                             <tr>
                                 <td>
                                     <a href="{% url 'cities:detail_city' city.pk %}">{{ city.name }}</a>
@@ -67,12 +67,13 @@
             </div>
 
             <div class="card shadow mt-4">
+                <h5 class="card-text text-center font-italic mt-3">Быстрый поиск по городам</h5>
                 <div class="card-body d-flex justify-content-center">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <input class="btn btn-outline-info btn-sm" type="submit" value="Отправить">
-                    </form>
+                    <form action="{% url 'cities:search_city' %}">
+                    <input class="form-control" type="text" placeholder="Поиск"
+                           aria-label="Search" name="q">
+                    <button class="btn btn-secondary my-2" type="submit">Поиск</button>
+                </form>
                 </div>
             </div>
 

@@ -4,14 +4,31 @@ from django.contrib import messages
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
 from .models import Train
 from .forms import TrainForm
+from django.db.models import Q
+
 
 __all__ = (
     'TrainListView',
     'DetailTrainView',
     'CreateTrainView',
     'UpdateTrainView',
+    'SearchTrainView',
     'delete_train'
 )
+
+
+class SearchTrainView(ListView):
+    model = Train
+    template_name = 'trains/list_trains.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        search = Train.objects.filter(
+            Q(name__icontains=query) |
+            Q(from_city__name__icontains=query) |
+            Q(to_city__name__icontains=query)
+        )
+        return search
 
 
 class TrainListView(ListView):

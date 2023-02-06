@@ -10,4 +10,5 @@ urlpatterns = [
     path('add/', CreateTrainView.as_view(), name='create_train'),
     path('update/<int:pk>/', UpdateTrainView.as_view(), name='update_train'),
     path('delete/<int:pk>/', delete_train, name='delete_train'),
+    path('search/', SearchTrainView.as_view(), name='search_train')
 ]

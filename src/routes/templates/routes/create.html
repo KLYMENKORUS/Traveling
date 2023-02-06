@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Создание нового поезда{% endblock %}
+{% block title %}Добавить маршрут{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-6 mx-auto">
             <div class="card shadow mt-4">
                 <div class="card-body">
-                <h5 class="card-text text-center font-italic">Создание нового поезда</h5>
-                    <form action="" method="post">
+                <h5 class="card-text text-center font-italic">Создание маршрута</h5>
+                    <form action="{% url 'save_route' %}" method="post">
                         {% csrf_token %}
                         {% for field in form %}
                             <div class="fieldWrapper">
@@ -20,14 +20,13 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             {% endif %}
-                                {{ field.label_tag }} {{ field }}
+                                {{ field }}
                                 {% if field.help_text %}
                                     <p class="help">{{ field.help_text|safe }}</p>
                                 {% endif %}
                             </div>
                         {% endfor %}
-                        <input class="btn btn-info mt-3" type="submit" value="Добавить">
-
+                        <input class="btn btn-info mt-3" type="submit" value="Добавить маршрут?">
                     </form>
                 </div>
             </div>
