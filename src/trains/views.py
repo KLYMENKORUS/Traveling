@@ -1,7 +1,8 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.views.generic import DetailView, CreateView, UpdateView, ListView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView, DeleteView
 from .models import Train
 from .forms import TrainForm
 from django.db.models import Q
@@ -13,7 +14,7 @@ __all__ = (
     'CreateTrainView',
     'UpdateTrainView',
     'SearchTrainView',
-    'delete_train'
+    'TrainDeleteView'
 )
 
 
@@ -42,7 +43,7 @@ class DetailTrainView(DetailView):
     template_name = 'trains/detail_train.html'
 
 
-class CreateTrainView(CreateView):
+class CreateTrainView(LoginRequiredMixin, CreateView):
     model = Train
     form_class = TrainForm
     template_name = 'trains/create_train.html'
@@ -57,7 +58,7 @@ class CreateTrainView(CreateView):
         return super().form_valid(form)
 
 
-class UpdateTrainView(UpdateView):
+class UpdateTrainView(LoginRequiredMixin, UpdateView):
     model = Train
     form_class = TrainForm
     template_name = 'trains/update_train.html'
@@ -72,11 +73,19 @@ class UpdateTrainView(UpdateView):
         return super().form_valid(form)
 
 
-def delete_train(request, pk):
-    train = get_object_or_404(Train, id=pk)
-    train.delete()
-    messages.success(request, f'Город {train.name} успешно удален!')
-    return redirect('trains:list_trains')
+class TrainDeleteView(LoginRequiredMixin, DeleteView):
+    model = Train
+    success_url = reverse_lazy('trains:list_trains')
+
+    def post(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        messages.success(request, f'Поезд {self.object.name} успешно удален!')
+        return redirect(success_url)
 
 
 

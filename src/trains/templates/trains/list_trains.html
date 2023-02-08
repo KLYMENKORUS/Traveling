@@ -32,16 +32,22 @@
                                 <td>{{ train.from_city }}</td>
                                 <td>{{ train.to_city }}</td>
                                 <td class="text-center">{{ train.travel_time }}</td>
+                                {% if user.is_authenticated %}
                                 <td>
                                     <a class="btn btn-outline-info btn-sm" href="{% url 'trains:update_train' train.pk %}">
                                         Редактировать
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="btn btn-outline-danger btn-sm" href="{% url 'trains:delete_train' train.pk %}">
-                                        Удалить
-                                    </a>
+                                    <form action="{% url 'trains:delete_train' train.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="submit" class="btn btn-sm btn-outline-danger" value="Удалить">
+                                    </form>
                                 </td>
+                                {% else %}
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                {% endif %}
                             </tr>
 
                         {% endfor %}

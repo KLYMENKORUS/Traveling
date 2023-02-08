@@ -20,6 +20,7 @@
                             <th>Откуда</th>
                             <th>Куда</th>
                             <th class="text-center">Время в пути</th>
+                            <th>&nbsp;</th>
 
                         </tr>
                         </thead>
@@ -31,6 +32,15 @@
                                 <td>{{ route.from_city }}</td>
                                 <td>{{ route.to_city }}</td>
                                 <td class="text-center">{{ route.travel_time }}</td>
+                                <td>
+                                    {% if user.is_autheticated %}
+                                    <form action="{% url 'delete_route' route.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="submit" class="btn btn-sm btn-outline-danger" value="Удалить">
+                                    </form>
+                                    {% endif %}&nbsp;
+                                </td>
+
                             </tr>
 
                         {% endfor %}

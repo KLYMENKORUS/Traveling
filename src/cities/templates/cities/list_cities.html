@@ -19,23 +19,30 @@
                         </thead>
                         {% for city in object_list %}
                             <tr>
-                                <td>
-                                    <a href="{% url 'cities:detail_city' city.pk %}">{{ city.name }}</a>
+                                {% if not user.is_authenticated %}
+                                <td colspan="3">
+                                    <a class="d-flex justify-content-center"
+                                       href="{% url 'cities:detail_city' city.pk %}">{{ city.name }}</a>
                                 </td>
-                                <td>
-                                    <a class="btn btn-outline-info btn-sm" href="{% url 'cities:update_city' city.pk %}">
-                                        Редактировать
-                                    </a>
-                                </td>
-                                <td>
-                                    <a class="btn btn-outline-danger btn-sm" href="{% url 'cities:delete_city' city.pk %}">
-                                        Удалить
-                                    </a>
-                                </td>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                    <td>
+                                        <a href="{% url 'cities:detail_city' city.pk %}">{{ city.name }}</a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-outline-info btn-sm" href="{% url 'cities:update_city' city.pk %}">
+                                            Редактировать
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <form action="{% url 'cities:delete_city' city.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="submit" class="btn btn-sm btn-outline-danger" value="Удалить">
+                                        </form>
+                                    </td>
+                                {% endif %}
                             </tr>
-
                         {% endfor %}
-
                     </table>
                 </div>
 

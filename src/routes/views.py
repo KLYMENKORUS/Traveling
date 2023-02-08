@@ -1,7 +1,9 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
-
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, DeleteView
+from django.contrib.auth.decorators import login_required
 from cities.models import City
 from trains.models import Train
 from .models import Route
@@ -17,7 +19,8 @@ __all__ = (
     'save_route',
     'RouteListView',
     'RouteSearchView',
-    'RouteDetailView'
+    'RouteDetailView',
+    'RouteDeleteView',
 )
 
 
@@ -45,6 +48,7 @@ def find_routes(request):
         return render(request, 'routes/routes_list.html', context)
 
 
+@login_required()
 def add_route(request):
     if request.method == 'POST':
         context = {}
@@ -75,6 +79,7 @@ def add_route(request):
         return redirect('home')
 
 
+@login_required()
 def save_route(request):
     if request.method == 'POST':
         form = RouteModelForm(request.POST)
@@ -110,3 +115,18 @@ class RouteSearchView(ListView):
 class RouteDetailView(DetailView):
     queryset = Route.objects.all()
     template_name = 'routes/detail.html'
+
+
+class RouteDeleteView(LoginRequiredMixin, DeleteView):
+    model = Route
+    success_url = reverse_lazy('list')
+
+    def post(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        messages.success(request, f'Маршрут {self.object.name} успешно удален!')
+        return redirect(success_url)

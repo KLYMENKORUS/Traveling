@@ -10,4 +10,5 @@ urlpatterns = [
     path('routes_list/', RouteListView.as_view(), name='list'),
     path('search/', RouteSearchView.as_view(), name='search_route'),
     path('detail/<int:pk>/', RouteDetailView.as_view(), name='detail_route'),
+    path('delete/<int:pk>/', RouteDeleteView.as_view(), name='delete_route'),
 ]
