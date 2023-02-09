@@ -46,7 +46,14 @@ class UserRegistrationForm(forms.ModelForm):
         data = self.cleaned_data
         if data.get('password') != data.get('password2'):
             raise forms.ValidationError('Пароли не совпадают!')
+        return data.get('password2')
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('Пользователь с таким логином уже существует!')
+        return username
 
     class Meta:
         model = User
-        fields = ('username',)
+        fields = ('username', 'password', 'password2')
