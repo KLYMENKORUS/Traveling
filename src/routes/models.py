@@ -1,10 +1,13 @@
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 from django.db import models
 
 
 class Route(models.Model):
     name = models.CharField(max_length=50, unique=True,
                             verbose_name='Название маршрута')
+    owner_route = models.ForeignKey(User, on_delete=models.CASCADE,
+                                    verbose_name='Автор Маршрута')
     travel_time = models.PositiveSmallIntegerField(verbose_name='Общее время в пути')
     from_city = models.ForeignKey('cities.City', on_delete=models.CASCADE,
                                   related_name='route_from_city_set',

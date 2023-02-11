@@ -69,7 +69,7 @@ def add_route(request):
                     'from_city': cities[from_city_id],
                     'to_city': cities[to_city_id],
                     'travel_time': total_time,
-                    'trains': qs
+                    'trains': qs,
                 })
             context['form'] = form
         return render(request, 'routes/create.html', context)
@@ -84,12 +84,15 @@ def save_route(request):
     if request.method == 'POST':
         form = RouteModelForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_route = form.save(commit=False)
+            new_route.owner_route = request.user
+            new_route.save()
+            form.save_m2m()
             messages.success(request, f'Маршрут успешно сохранен!')
-            return redirect('home')
+            return redirect('list')
         return render(request, 'routes/create.html', {'form': form})
     else:
-        messages.error(request, 'Невозможно сохранить нечуществующий'
+        messages.error(request, 'Невозможно сохранить неcуществующий'
                                 'маршрут')
         return redirect('home')
 
@@ -98,6 +101,11 @@ class RouteListView(ListView):
     model = Route
     paginate_by = 3
     template_name = 'routes/list.html'
+
+    def get_queryset(self):
+        qs = Route.objects.filter(
+            owner_route=self.request.user)
+        return qs
 
 
 class RouteSearchView(ListView):
@@ -113,7 +121,7 @@ class RouteSearchView(ListView):
 
 
 class RouteDetailView(DetailView):
-    queryset = Route.objects.all()
+    model = Route
     template_name = 'routes/detail.html'
 
 

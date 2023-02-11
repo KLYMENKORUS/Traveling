@@ -24,6 +24,7 @@
 
                         </tr>
                         </thead>
+
                         {% for route in object_list %}
                             <tr>
                                 <td>
@@ -33,16 +34,14 @@
                                 <td>{{ route.to_city }}</td>
                                 <td class="text-center">{{ route.travel_time }}</td>
                                 <td>
-                                    {% if user.is_autheticated %}
+                                    {% if user.is_authenticated %}
                                     <form action="{% url 'delete_route' route.pk %}" method="post">
                                         {% csrf_token %}
                                         <input type="submit" class="btn btn-sm btn-outline-danger" value="Удалить">
                                     </form>
                                     {% endif %}&nbsp;
                                 </td>
-
                             </tr>
-
                         {% endfor %}
 
                     </table>

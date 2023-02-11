@@ -22,9 +22,10 @@ class TrainForm(forms.ModelForm):
                                      empty_label='Выбирете город')
 
     def clean_name(self):
-        name = self.cleaned_data['name']
-        if Train.objects.filter(name=name).exists():
+        data = self.cleaned_data
+        if Train.objects.filter(name=data.get('name')).exists():
             raise ValidationError('Поезд с таким номером уже существует!')
+        return data.get('name')
 
     class Meta:
         model = Train

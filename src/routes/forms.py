@@ -1,6 +1,5 @@
 from django import forms
 from django.core.exceptions import ValidationError
-
 from cities.models import City
 from routes.models import Route
 from trains.models import Train
@@ -45,11 +44,12 @@ class RouteModelForm(forms.ModelForm):
     travel_time = forms.IntegerField(widget=forms.HiddenInput())
 
     def clean_name(self):
-        name = self.cleaned_data['name']
-        if Route.objects.filter(name=name).exists():
+        data = self.cleaned_data
+        if Route.objects.filter(name=data.get('name')).exists():
             raise ValidationError('Маршрут с таким названием уже существует!')
+        return data.get('name')
 
     class Meta:
         model = Route
-        fields = '__all__'
+        fields = ['name', 'from_city', 'to_city', 'trains', 'travel_time']
 

@@ -10,9 +10,10 @@ class CityForm(forms.ModelForm):
                'placeholder': 'Введите город'}))
 
     def clean_name(self):
-        name = self.cleaned_data['name']
-        if City.objects.filter(name=name).exists():
+        data = self.cleaned_data
+        if City.objects.filter(name=data.get('name')).exists():
             raise ValidationError('Город с таким названием уже существует!')
+        return data.get('name')
 
     class Meta:
         model = City
